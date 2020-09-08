@@ -109,4 +109,31 @@ JOIN countries
 ON players.country_id = countries.id
 LEFT JOIN teams
 ON players.previous_team_id = teams.id;
--- ↑playersテーブルにcountriesテーブルとteamsテーブル(NULL含む)の結合
+-- ↑playersテーブルにcountriesテーブルとteamsテーブル(NULL含む)の結合(条件は省略)
+
+
+
+-- ↓総合演習↓
+SELECT name AS "選手名", height AS "身長"
+FROM players
+WHERE height > (
+  SELECT AVG(height)
+  FROM players
+)
+;
+-- ↑サブクエリでは平均身長がしたい。クエリでは選手名と身長が知りたい(ASでカラム名変更)、どんな?「平均身長よりも高い選手名と身長」
+
+SELECT *
+FROM players
+JOIN countries
+ON players.country_id = countries.id
+WHERE countries.name = "日本"
+AND players.height >= 180;
+-- ↑playersテーブルにcountriesテーブルを結合(条件は省略)、全てのカラムが知りたい。その中でも国の名前が日本と選手の身長が180以上の人
+
+SELECT countries.name AS "国名", AVG(goals) AS "平均得点"
+FROM players
+JOIN countries
+ON players.country_id = countries.id
+GROUP BY countries.name;
+-- ↑playersテーブルにcountriesテーブルを結合(条件は省略)、国ごとの名前(playersテーブルにも同名カラムがあるので何のカラムか定義)と国ごとの平均得点が知りたい(ASでカラム名変更)、国の名前でグループ分け
